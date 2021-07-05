@@ -1,0 +1,637 @@
+[
+    {
+        "id": "c3cb5a20.fed558",
+        "type": "tab",
+        "label": "Sensores - Dados",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "3ee3e1d5.cb33fe",
+        "type": "comment",
+        "z": "c3cb5a20.fed558",
+        "name": "Controlar Ar Condicionado Manualmente - Quarto  ",
+        "info": "",
+        "x": 220,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "19c5e185.b6489e",
+        "type": "ui_button",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "group": "695403c9.e3c41c",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Ativar ",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "toys",
+        "payload": "ativar AC",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 110,
+        "y": 580,
+        "wires": [
+            [
+                "5f8a4a13.55b244"
+            ]
+        ]
+    },
+    {
+        "id": "e5701d55.676cb",
+        "type": "ui_button",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "group": "695403c9.e3c41c",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Desligar ",
+        "tooltip": "",
+        "color": "black",
+        "bgcolor": "",
+        "icon": "toys",
+        "payload": "desligar AC",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 120,
+        "y": 620,
+        "wires": [
+            [
+                "5f8a4a13.55b244"
+            ]
+        ]
+    },
+    {
+        "id": "5f8a4a13.55b244",
+        "type": "mqtt out",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "Quarto/temp/ac",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "124fc042.c6556",
+        "x": 320,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "8a1a8626.282368",
+        "type": "mqtt in",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "Quarto/temp",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "124fc042.c6556",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "a339834b.52821"
+            ]
+        ]
+    },
+    {
+        "id": "a339834b.52821",
+        "type": "change",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "temperatura.quarto",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "b308b476.82c478"
+            ]
+        ]
+    },
+    {
+        "id": "fb2bd07e.ca294",
+        "type": "change",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "temperatura.AC",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 400,
+        "wires": [
+            [
+                "c8235e15.06de3"
+            ]
+        ]
+    },
+    {
+        "id": "8124c13e.7e026",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Ativar/Desligar",
+        "func": "var tempQuarto = msg.temperatura.quarto;\nvar tempAC = msg.temperatura.AC;\nvar auto = msg.auto;\n\nif(tempQuarto >= tempAC )\n{\n    return{payload:\"ativar AC\"}\n}\nelse if (tempQuarto < tempAC)\n{\n    return{payload:\"desligar AC\"};\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 460,
+        "wires": [
+            [
+                "e8d04373.f94b1"
+            ]
+        ]
+    },
+    {
+        "id": "b308b476.82c478",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Converte para int",
+        "func": "msg.temperatura.quarto = Number(msg.temperatura.quarto);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 320,
+        "wires": [
+            [
+                "54227174.ea5ef"
+            ]
+        ]
+    },
+    {
+        "id": "e8d04373.f94b1",
+        "type": "mqtt out",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "Quarto/temp/ac",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "124fc042.c6556",
+        "x": 1040,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "97a03453.e86d08",
+        "type": "comment",
+        "z": "c3cb5a20.fed558",
+        "name": "Controlar Ar Condicionado Autonomamente - Quarto  ",
+        "info": "",
+        "x": 250,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c8235e15.06de3",
+        "type": "ui_switch",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "label": "Automático",
+        "tooltip": "",
+        "group": "695403c9.e3c41c",
+        "order": 4,
+        "width": 4,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "mi-radio_button_checked",
+        "oncolor": "green",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "mi-radio_button_checked",
+        "offcolor": "red",
+        "animate": false,
+        "x": 450,
+        "y": 460,
+        "wires": [
+            [
+                "3060daa7.3ab766"
+            ]
+        ]
+    },
+    {
+        "id": "3060daa7.3ab766",
+        "type": "switch",
+        "z": "c3cb5a20.fed558",
+        "name": "Escolher modo",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 640,
+        "y": 460,
+        "wires": [
+            [
+                "8124c13e.7e026"
+            ],
+            [
+                "19c5e185.b6489e",
+                "e5701d55.676cb"
+            ]
+        ]
+    },
+    {
+        "id": "54227174.ea5ef",
+        "type": "ui_slider",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "label": "ºC",
+        "tooltip": "",
+        "group": "695403c9.e3c41c",
+        "order": 8,
+        "width": 4,
+        "height": 1,
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": "40",
+        "step": 1,
+        "x": 350,
+        "y": 400,
+        "wires": [
+            [
+                "fb2bd07e.ca294"
+            ]
+        ]
+    },
+    {
+        "id": "120913b2.70f45c",
+        "type": "comment",
+        "z": "c3cb5a20.fed558",
+        "name": "Notificação - Presença de carro ",
+        "info": "",
+        "x": 170,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "223465f0.a0d6ea",
+        "type": "mqtt in",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "Garagem/carro/estado",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "124fc042.c6556",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 160,
+        "y": 920,
+        "wires": [
+            [
+                "2a7dbb78.cf0544",
+                "7964cb88.339354"
+            ]
+        ]
+    },
+    {
+        "id": "2a7dbb78.cf0544",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Converter para int",
+        "func": "msg.payload = Number(msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 920,
+        "wires": [
+            [
+                "8becd0df.4ef83"
+            ]
+        ]
+    },
+    {
+        "id": "8becd0df.4ef83",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Retorna estado",
+        "func": "if(msg.payload=='1')\n{\n    return{payload:\"Carro detetado na Garagem\"};\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 920,
+        "wires": [
+            [
+                "5933c22d.3965cc"
+            ]
+        ]
+    },
+    {
+        "id": "7964cb88.339354",
+        "type": "debug",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "5933c22d.3965cc",
+        "type": "ui_toast",
+        "z": "c3cb5a20.fed558",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "black",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "",
+        "name": "",
+        "x": 820,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "e5b28584.1d8f08",
+        "type": "comment",
+        "z": "c3cb5a20.fed558",
+        "name": "Estado AC",
+        "info": "",
+        "x": 100,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "ad0a9481.d746d8",
+        "type": "mqtt in",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "Quarto/AC/estado",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "124fc042.c6556",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 130,
+        "y": 740,
+        "wires": [
+            [
+                "348d8b17.cab2b4"
+            ]
+        ]
+    },
+    {
+        "id": "348d8b17.cab2b4",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Converter para int",
+        "func": "msg.payload = Number(msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 740,
+        "wires": [
+            [
+                "4510b988.731cf8"
+            ]
+        ]
+    },
+    {
+        "id": "4510b988.731cf8",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Retorna estado",
+        "func": "if(msg.payload=='1')\n{\n    return{payload:\"ON\"};\n}\nelse if (msg.payload=='0')\n{\n    return{payload:\"OFF\"};\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 740,
+        "wires": [
+            [
+                "b1c2075e.f173c8"
+            ]
+        ]
+    },
+    {
+        "id": "b1c2075e.f173c8",
+        "type": "ui_text",
+        "z": "c3cb5a20.fed558",
+        "group": "695403c9.e3c41c",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Estado",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 670,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "501af74.4d98808",
+        "type": "comment",
+        "z": "c3cb5a20.fed558",
+        "name": "Estado Sensor Movimento",
+        "info": "",
+        "x": 170,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "114ec281.2c9b1d",
+        "type": "mqtt in",
+        "z": "c3cb5a20.fed558",
+        "name": "",
+        "topic": "home/Sensor/movimento",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "124fc042.c6556",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 170,
+        "y": 140,
+        "wires": [
+            [
+                "a45ff8aa.eed968"
+            ]
+        ]
+    },
+    {
+        "id": "a45ff8aa.eed968",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Converter para int",
+        "func": "msg.payload = Number(msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "5e50b685.8efb98"
+            ]
+        ]
+    },
+    {
+        "id": "5e50b685.8efb98",
+        "type": "function",
+        "z": "c3cb5a20.fed558",
+        "name": "Retorna estado",
+        "func": "if(msg.payload=='1')\n{\n    return{payload:\"Detetado Movimento na Entrada!!\"};\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 140,
+        "wires": [
+            [
+                "bb9e4e17.c809e"
+            ]
+        ]
+    },
+    {
+        "id": "bb9e4e17.c809e",
+        "type": "ui_toast",
+        "z": "c3cb5a20.fed558",
+        "position": "top left",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "topic": "",
+        "name": "",
+        "x": 800,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "695403c9.e3c41c",
+        "type": "ui_group",
+        "name": "Ventoinha",
+        "tab": "8937b471.18bbc8",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "124fc042.c6556",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8937b471.18bbc8",
+        "type": "ui_tab",
+        "name": "Quarto",
+        "icon": "fa-bed",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]
